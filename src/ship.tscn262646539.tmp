@@ -1,0 +1,68 @@
+[gd_scene load_steps=9 format=3 uid="uid://bj040eeas2w7l"]
+
+[ext_resource type="Script" uid="uid://hguyo8kqywak" path="res://src/area_2d.gd" id="1_dgv1e"]
+[ext_resource type="Texture2D" uid="uid://betdrs3nncqre" path="res://assets/ship_scout.png" id="1_itix8"]
+[ext_resource type="Texture2D" uid="uid://birwess4h5cql" path="res://assets/enemy_fighter.png" id="3_37pyw"]
+[ext_resource type="Script" uid="uid://dn15nht83agph" path="res://src/mob.gd" id="3_dgv1e"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_poj8t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_itix8")
+}],
+"loop": true,
+"name": &"ship",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_37pyw"]
+radius = 22.0
+height = 48.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dgv1e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_37pyw")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uoiig"]
+radius = 14.0
+height = 28.0
+
+[node name="Game" type="Node"]
+
+[node name="Ship" type="Area2D" parent="."]
+script = ExtResource("1_dgv1e")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Ship"]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_poj8t")
+animation = &"ship"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ship"]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_37pyw")
+
+[node name="Mob" type="RigidBody2D" parent="."]
+position = Vector2(0, -500)
+gravity_scale = 0.0
+script = ExtResource("3_dgv1e")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Mob"]
+rotation = 3.1415927
+sprite_frames = SubResource("SpriteFrames_dgv1e")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mob"]
+shape = SubResource("CapsuleShape2D_uoiig")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Mob"]
+
+[connection signal="screen_exited" from="Mob/VisibleOnScreenNotifier2D" to="Mob" method="_on_visible_on_screen_notifier_2d_screen_exited"]
