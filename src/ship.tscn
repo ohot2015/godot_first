@@ -1,10 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://bj040eeas2w7l"]
+[gd_scene load_steps=18 format=3 uid="uid://bj040eeas2w7l"]
 
 [ext_resource type="Script" uid="uid://hguyo8kqywak" path="res://src/area_2d.gd" id="1_dgv1e"]
 [ext_resource type="Texture2D" uid="uid://betdrs3nncqre" path="res://assets/ship_scout.png" id="1_itix8"]
 [ext_resource type="Texture2D" uid="uid://bh0s66dkhadyc" path="res://assets/6dJCjO.png" id="1_uoiig"]
 [ext_resource type="Texture2D" uid="uid://birwess4h5cql" path="res://assets/enemy_fighter.png" id="3_37pyw"]
 [ext_resource type="Script" uid="uid://dn15nht83agph" path="res://src/mob.gd" id="3_dgv1e"]
+[ext_resource type="Script" uid="uid://c1ag3kle4jcv3" path="res://src/roket.gd" id="4_c87l6"]
+[ext_resource type="Texture2D" uid="uid://c5dbtfn8dovrl" path="res://assets/roket.png" id="5_3knsp"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_poj8t"]
 animations = [{
@@ -35,6 +37,46 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uoiig"]
 radius = 14.0
 height = 28.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_c87l6"]
+radius = 2.0
+height = 12.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3knsp"]
+atlas = ExtResource("5_3knsp")
+region = Rect2(18, 0, 9, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wokxb"]
+atlas = ExtResource("5_3knsp")
+region = Rect2(0, 0, 9, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ps5e"]
+atlas = ExtResource("5_3knsp")
+region = Rect2(9, 0, 9, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7xwq4"]
+atlas = ExtResource("5_3knsp")
+region = Rect2(27, 0, 9, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_otghp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3knsp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wokxb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ps5e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7xwq4")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
 
 [node name="Game" type="Node2D"]
 
@@ -74,4 +116,19 @@ shape = SubResource("CapsuleShape2D_uoiig")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Mob"]
 
+[node name="roket" type="Area2D" parent="."]
+position = Vector2(144, 657)
+script = ExtResource("4_c87l6")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="roket"]
+shape = SubResource("CapsuleShape2D_c87l6")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="roket"]
+sprite_frames = SubResource("SpriteFrames_otghp")
+animation = &"new_animation"
+frame = 2
+frame_progress = 0.5870374
+
 [connection signal="screen_exited" from="Mob/VisibleOnScreenNotifier2D" to="Mob" method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="body_entered" from="roket" to="roket" method="_on_body_entered"]
